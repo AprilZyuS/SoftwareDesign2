@@ -1,151 +1,124 @@
-import os
-import aiofiles
-from typing import List
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, File, UploadFile, Form, Query
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from sqlmodel import SQLModel, Session, select
-from models import User, Material, Project
-from config import engine
+from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import SQLModel, Session, create_engine, select
+from typing import List
+from datetime import datetime
+import os
 
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+from models import Material, Project
 
-app = FastAPI(title="Media Platform API (MySQL Version)")
+app = FastAPI()
 
-# 跨域设置
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 开发阶段允许所有来源
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 静态资源挂载
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+DATABASE_URL = "mysql+pymysql://root:040601@localhost:3306/media_platform?charset=utf8mb4"
+engine = create_engine(DATABASE_URL, echo=True)
+SQLModel.metadata.create_all(engine)
 
 
-@app.on_event("startup")
-def on_startup():
-    SQLModel.metadata.create_all(engine)
-    print("数据表初始化完成。")
+# 静态资源配置
+UPLOAD_ROOT = "uploads"
+os.makedirs(UPLOAD_ROOT, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_ROOT), name="uploads")
 
-
-# ========== 用户 ==========
-
-@app.post("/user/create")
-def create_user(user_id: str = Form(...)):
-    with Session(engine) as session:
-        user = session.get(User, user_id)
-        if not user:
-            user = User(id=user_id)
-            session.add(user)
-            session.commit()
-    return {"user_id": user_id}
-
-
-# ========== 素材 ==========
-
+# 文件上传：每个用户单独文件夹
 @app.post("/upload/")
-async def upload_file(user_id: str = Form(...), file: UploadFile = File(...)):
-    if not user_id:
-        raise HTTPException(status_code=400, detail="缺少 user_id")
-
-    user_dir = os.path.join(UPLOAD_DIR, user_id)
+async def upload_file(file: UploadFile = File(...), user_id: int = Form(1)):
+    user_dir = os.path.join(UPLOAD_ROOT, f"user_{user_id}")
     os.makedirs(user_dir, exist_ok=True)
 
-    save_path = os.path.join(user_dir, file.filename)
-    if os.path.exists(save_path):
-        base, ext = os.path.splitext(file.filename)
-        counter = 1
-        while os.path.exists(os.path.join(user_dir, f"{base}_{counter}{ext}")):
-            counter += 1
-        save_path = os.path.join(user_dir, f"{base}_{counter}{ext}")
+    filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}"
+    file_path = os.path.join(user_dir, filename)
 
-    async with aiofiles.open(save_path, 'wb') as out_file:
+    with open(file_path, "wb") as f:
         content = await file.read()
-        await out_file.write(content)
+        f.write(content)
 
-    rel_url = f"/uploads/{user_id}/{os.path.basename(save_path)}"
+    relative_url = f"/uploads/user_{user_id}/{filename}"
+    content_type = file.content_type
+    size = os.path.getsize(file_path)
 
+    # ✅ 同步写入数据库
+    material = Material(
+        user_id=user_id,
+        filename=file.filename,
+        filepath=relative_url,
+        content_type=content_type,
+        size=size,
+    )
     with Session(engine) as session:
-        mat = Material(
-            user_id=user_id,
-            filename=os.path.basename(save_path),
-            filepath=rel_url,
-            content_type=file.content_type,
-            size=len(content)
-        )
-        session.add(mat)
+        session.add(material)
         session.commit()
-        session.refresh(mat)
+        session.refresh(material)
 
-    return {"id": mat.id, "filename": mat.filename, "url": rel_url}
+    return {
+        "id": material.id,
+        "filename": file.filename,
+        "url": relative_url,
+        "user_id": user_id,
+        "content_type": content_type,
+        "size": size,
+    }
 
 
-@app.get("/materials/")
-def list_materials(user_id: str):
+#素材接口
+@app.get("/materials/", response_model=List[Material])
+def get_materials(user_id: int = Query(1)):
     with Session(engine) as session:
-        stmt = select(Material).where(Material.user_id == user_id)
-        mats = session.exec(stmt).all()
-        return [m.dict() for m in mats]
+        return session.exec(select(Material).where(Material.user_id == user_id)).all()
+
+
+@app.post("/materials/")
+def add_material(material: Material):
+    with Session(engine) as session:
+        session.add(material)
+        session.commit()
+        session.refresh(material)
+        return material
 
 
 @app.delete("/materials/{material_id}")
-def delete_material(material_id: int, user_id: str):
+def delete_material(material_id: int):
     with Session(engine) as session:
-        mat = session.get(Material, material_id)
-        if not mat or mat.user_id != user_id:
-            raise HTTPException(status_code=404, detail="素材不存在")
-
-        abs_path = os.path.join(os.getcwd(), mat.filepath.lstrip("/"))
-        if os.path.exists(abs_path):
-            os.remove(abs_path)
-
-        session.delete(mat)
+        material = session.get(Material, material_id)
+        if not material:
+            return {"error": "not found"}
+        session.delete(material)
         session.commit()
-    return {"ok": True}
+        return {"status": "deleted"}
 
 
-# ========== 作品 ==========
+
+# 作品相关接口
+@app.get("/projects/", response_model=List[Project])
+def get_projects(user_id: int = Query(1)):
+    with Session(engine) as session:
+        return session.exec(select(Project).where(Project.user_id == user_id)).all()
+
 
 @app.post("/projects/")
-def create_project(
-    user_id: str = Form(...),
-    name: str = Form(...),
-    description: str = Form(None),
-    material_ids: str = Form(None),
-    output_url: str = Form(None)
-):
+def add_project(project: Project):
     with Session(engine) as session:
-        project = Project(
-            user_id=user_id,
-            name=name,
-            description=description,
-            material_ids=material_ids,
-            output_url=output_url
-        )
         session.add(project)
         session.commit()
         session.refresh(project)
-    return project
-
-
-@app.get("/projects/")
-def list_projects(user_id: str):
-    with Session(engine) as session:
-        stmt = select(Project).where(Project.user_id == user_id)
-        projects = session.exec(stmt).all()
-        return [p.dict() for p in projects]
+        return project
 
 
 @app.delete("/projects/{project_id}")
-def delete_project(project_id: int, user_id: str):
+def delete_project(project_id: int):
     with Session(engine) as session:
         project = session.get(Project, project_id)
-        if not project or project.user_id != user_id:
-            raise HTTPException(status_code=404, detail="项目不存在")
+        if not project:
+            return {"error": "not found"}
         session.delete(project)
         session.commit()
-    return {"ok": True}
+        return {"status": "deleted"}
