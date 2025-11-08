@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="199e7d6e-2442-4826-9000-65e7e69c57b9" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_144713_7c870720ff15e4161f6dc8eccaa162ec_0.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151223_7c870720ff15e4161f6dc8eccaa162ec_720.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151627_7c870720ff15e4161f6dc8eccaa162ec_0.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151931_4d7ed4c68625ff7223f934f8cf9a9e6c_0.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialUploader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialUploader.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,13 +61,16 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="350qbpLj5lI0I4TGcXS8iwxhL2E" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -121,12 +128,17 @@
       <workItem from="1762560629434" duration="102000" />
       <workItem from="1762560758149" duration="2281000" />
       <workItem from="1762565502138" duration="7658000" />
-      <workItem from="1762581772314" duration="1720000" />
+      <workItem from="1762581772314" duration="5427000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="本次实现了前端和后端的互通，前端上传的照片可以保存到后端了" />
+    <option name="LAST_COMMIT_MESSAGE" value="本次实现了前端和后端的互通，前端上传的照片可以保存到后端了" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SoftwareDesign$main.coverage" NAME="main 覆盖结果" MODIFIED="1762568435434" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />

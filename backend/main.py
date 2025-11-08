@@ -46,7 +46,7 @@ async def upload_file(file: UploadFile = File(...), user_id: int = Form(1)):
     content_type = file.content_type
     size = os.path.getsize(file_path)
 
-    # ✅ 同步写入数据库
+    # 同步写入数据库
     material = Material(
         user_id=user_id,
         filename=file.filename,
@@ -73,7 +73,11 @@ async def upload_file(file: UploadFile = File(...), user_id: int = Form(1)):
 @app.get("/materials/", response_model=List[Material])
 def get_materials(user_id: int = Query(1)):
     with Session(engine) as session:
-        return session.exec(select(Material).where(Material.user_id == user_id)).all()
+        if user_id:
+            materials = session.exec(select(Material).where(Material.user_id == user_id)).all()
+        else:
+            materials = session.exec(select(Material)).all()
+        return materials
 
 
 @app.post("/materials/")

@@ -3,6 +3,7 @@ import {ref, onMounted} from "vue";
 import {getMaterials, deleteMaterial} from "../api";
 
 const materials = ref([]);
+const API_BASE = "http://127.0.0.1:8000";
 
 async function loadMaterials() {
   materials.value = await getMaterials();
@@ -20,8 +21,8 @@ onMounted(loadMaterials);
   <div class="material-list">
     <div class="grid">
       <div v-for="m in materials" :key="m.id" class="item">
-        <img :src="m.thumbnail"/>
-        <p>{{ m.name }}</p>
+        <img :src="API_BASE + m.filepath" :alt="m.filename"/>
+        <p>{{ m.filename }}</p>
         <button @click="removeMaterial(m.id)">删除</button>
       </div>
     </div>

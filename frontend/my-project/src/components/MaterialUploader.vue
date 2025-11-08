@@ -26,7 +26,7 @@ async function upload() {
 
 <template>
   <div>
-    <input type="file" @change="onFileChange"/>
+    <input type="file" @change="onFileChange"  />
     <button @click="upload">上传素材</button>
   </div>
 </template>
