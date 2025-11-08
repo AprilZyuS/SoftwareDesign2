@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, Session, create_engine, select
 from typing import List
 from datetime import datetime
+from pydantic import BaseModel
 import os
 
 from models import Material, Project
@@ -28,6 +29,15 @@ SQLModel.metadata.create_all(engine)
 UPLOAD_ROOT = "uploads"
 os.makedirs(UPLOAD_ROOT, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_ROOT), name="uploads")
+
+class StringData(BaseModel):
+    prompts: str
+    #提示词
+
+@app.post("/api/submit")
+def receive_json(data: StringData):
+    print(f"接收 JSON 字符串：{data.prompts}")
+    return {"status": "success", "msg": "字符串接收成功"}
 
 # 文件上传：每个用户单独文件夹
 @app.post("/upload/")
