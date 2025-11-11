@@ -16,14 +16,8 @@
     <!-- 主内容区 -->
     <div class="main-area">
       <div class="center-content">
-        <MaterialUploader @upload="handleUpload" />
-        <el-button type="primary" :loading="loading" @click="startDubbing">开始配音</el-button>
+        <component :is="currentComponent" />
 
-        <div v-if="audioUrl" class="preview-box">
-          <audio :src="audioUrl" controls></audio>
-        </div>
-
-        <el-button type="success" @click="downloadFile">下载文件</el-button>
       </div>
 
       <!-- 右侧素材库 -->
@@ -36,15 +30,32 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import MaterialUploader from './components/MaterialUploader.vue'
 import MaterialLibrary from './components/MaterialLibrary.vue'
+import MaterialGeneration from './components/MaterialGeneration.vue'
+import Synthesis from './components/Synthesis.vue'
+import VideoGeneration from './components/VideoGeneration.vue'
+import VideoDubbing from './components/VideoDubbing.vue'
 
 const tabs = ['素材生成', '合成', '视频生成', '视频配音']
 const activeTab = ref('素材生成')
 const loading = ref(false)
 const audioUrl = ref('')
 const materials = ref([])
+
+const tabComponents = {
+  '素材生成': MaterialGeneration,
+  '合成': Synthesis,
+  '视频生成': VideoGeneration,
+  '视频配音': VideoDubbing
+}
+
+// 根据当前激活的标签，计算需要渲染的组件
+const currentComponent = computed(() => {
+  return tabComponents[activeTab.value]
+})
+
 const handleUpload = (file) => {
   if (!file) return
 
@@ -130,12 +141,7 @@ const downloadFile = () => alert('下载中...')
 .right-panel h3 {
   margin-bottom: 12px;
 }
-.preview-box {
-  background: #2a2a2a;
-  padding: 16px;
-  border-radius: 12px;
-  width: 400px;
-  text-align: center;
-}
+
+
 </style>
 

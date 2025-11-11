@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, Session, create_engine, select
 from typing import List
 from datetime import datetime
+from pydantic import BaseModel
 import os
 
 from models import Material, Project
@@ -29,6 +30,23 @@ UPLOAD_ROOT = "uploads"
 os.makedirs(UPLOAD_ROOT, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_ROOT), name="uploads")
 
+class Prompts(BaseModel):
+    prompts: str
+    #提示词
+
+class VideoLink(BaseModel):
+    VLink: str
+    #视频链接
+@app.post("/api/submit")
+def receive_json(data: Prompts):
+    print(f"接收 JSON 字符串：{data.prompts}")
+    return {"status": "success", "msg": "字符串接收成功"}
+
+@app.get("/api/VideoLink")
+def get_video_link(data: VideoLink):
+    return VideoLink.VLink
+
+
 # 文件上传：每个用户单独文件夹
 @app.post("/upload/")
 async def upload_file(file: UploadFile = File(...), user_id: int = Form(1)):
@@ -46,7 +64,7 @@ async def upload_file(file: UploadFile = File(...), user_id: int = Form(1)):
     content_type = file.content_type
     size = os.path.getsize(file_path)
 
-    # ✅ 同步写入数据库
+    # 同步写入数据库
     material = Material(
         user_id=user_id,
         filename=file.filename,
@@ -73,7 +91,11 @@ async def upload_file(file: UploadFile = File(...), user_id: int = Form(1)):
 @app.get("/materials/", response_model=List[Material])
 def get_materials(user_id: int = Query(1)):
     with Session(engine) as session:
-        return session.exec(select(Material).where(Material.user_id == user_id)).all()
+        if user_id:
+            materials = session.exec(select(Material).where(Material.user_id == user_id)).all()
+        else:
+            materials = session.exec(select(Material)).all()
+        return materials
 
 
 @app.post("/materials/")
