@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="199e7d6e-2442-4826-9000-65e7e69c57b9" name="更改" comment="提示词接口已经写好，部分页面跳转完成">
+    <list default="true" id="199e7d6e-2442-4826-9000-65e7e69c57b9" name="更改" comment="前端工作基本完成，需要和后端的API链接起来">
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_144713_7c870720ff15e4161f6dc8eccaa162ec_0.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151223_7c870720ff15e4161f6dc8eccaa162ec_720.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151627_7c870720ff15e4161f6dc8eccaa162ec_0.jpg" afterDir="false" />
@@ -17,11 +17,11 @@
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_222249_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_222600_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_222617_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223104_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223351_32e0dd2f8fb39e5dfbc615a3510ece86.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223418_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223427_eaaa0b7b83bd079e277735efbd49f2f5.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialGeneration.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialGeneration.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialUploader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialUploader.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +67,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -124,7 +124,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23726.96" />
+        <option value="bundled-python-sdk-c69650fc56ca-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.15619.17" />
       </set>
     </attachedChunks>
   </component>
@@ -141,7 +141,8 @@
       <workItem from="1762560758149" duration="2281000" />
       <workItem from="1762565502138" duration="7658000" />
       <workItem from="1762581772314" duration="5427000" />
-      <workItem from="1762608070599" duration="3279000" />
+      <workItem from="1762608070599" duration="3580000" />
+      <workItem from="1762848062286" duration="5000" />
     </task>
     <task id="LOCAL-00001" summary="前端可以显示后端保存的图像了">
       <option name="closed" value="true" />
@@ -167,7 +168,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762610719849</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="前端工作基本完成，需要和后端的API链接起来">
+      <option name="closed" value="true" />
+      <created>1762612377004</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762612377004</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +187,8 @@
     <MESSAGE value="本次实现了前端和后端的互通，前端上传的照片可以保存到后端了" />
     <MESSAGE value="前端可以显示后端保存的图像了" />
     <MESSAGE value="提示词接口已经写好，部分页面跳转完成" />
-    <option name="LAST_COMMIT_MESSAGE" value="提示词接口已经写好，部分页面跳转完成" />
+    <MESSAGE value="前端工作基本完成，需要和后端的API链接起来" />
+    <option name="LAST_COMMIT_MESSAGE" value="前端工作基本完成，需要和后端的API链接起来" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SoftwareDesign$main.coverage" NAME="main 覆盖结果" MODIFIED="1762568435434" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />
