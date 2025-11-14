@@ -5,23 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="199e7d6e-2442-4826-9000-65e7e69c57b9" name="更改" comment="前端工作基本完成，需要和后端的API链接起来">
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_144713_7c870720ff15e4161f6dc8eccaa162ec_0.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151223_7c870720ff15e4161f6dc8eccaa162ec_720.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151627_7c870720ff15e4161f6dc8eccaa162ec_0.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_151931_4d7ed4c68625ff7223f934f8cf9a9e6c_0.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_153559_32e0dd2f8fb39e5dfbc615a3510ece86_720.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_154145_Snipaste_2025-08-16_20-57-05.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_154542_B22170423.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_154722_实验二_缩混.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_181342_Snipaste_2025-10-29_12-23-13.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_222249_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_222600_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_222617_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223104_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223351_32e0dd2f8fb39e5dfbc615a3510ece86.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223418_3219d18c9451b24e3a77c36881b28755.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251108_223427_eaaa0b7b83bd079e277735efbd49f2f5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_201141_generated.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_201223_generated.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SoftwareDesign.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SoftwareDesign.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/HandleCenter.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/HandleCenter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_114711_1dce70de53b9df10cd7867c5a4bf45a6_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_115524_3219d18c9451b24e3a77c36881b28755_0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_140604_3219d18c9451b24e3a77c36881b28755_0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_143236_3219d18c9451b24e3a77c36881b28755_0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialGeneration.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialGeneration.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/Synthesis.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/Synthesis.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,12 +54,14 @@
     &quot;assignee&quot;: &quot;AprilZyuS&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/AprilZyuS/SoftwareDesign2.git&quot;,
-    &quot;accountId&quot;: &quot;7a027241-8fb6-4918-a21d-81b545592b33&quot;
-  }
-}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="e2b37f2c-0b12-4ebb-beb7-b732e870dac5" />
+        <option name="url" value="https://github.com/AprilZyuS/SoftwareDesign2.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -143,6 +142,11 @@
       <workItem from="1762581772314" duration="5427000" />
       <workItem from="1762608070599" duration="3580000" />
       <workItem from="1762848062286" duration="5000" />
+      <workItem from="1762848079225" duration="71000" />
+      <workItem from="1762872779463" duration="214000" />
+      <workItem from="1762873275881" duration="382000" />
+      <workItem from="1762876321484" duration="225000" />
+      <workItem from="1763116159982" duration="7480000" />
     </task>
     <task id="LOCAL-00001" summary="前端可以显示后端保存的图像了">
       <option name="closed" value="true" />
@@ -176,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762612377004</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="前端工作基本完成，需要和后端的API链接起来">
+      <option name="closed" value="true" />
+      <created>1762848143109</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762848143109</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

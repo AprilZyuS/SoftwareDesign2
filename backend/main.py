@@ -6,11 +6,17 @@ from sqlmodel import SQLModel, Session, create_engine, select
 from typing import List
 from datetime import datetime
 from pydantic import BaseModel
+from HandleCenter import handleCenter
 import os
+import requests
+from fastapi.responses import Response
+from vg import VideoGenerator
+from fastapi import Body
 
 from models import Material, Project
 
 app = FastAPI()
+hc = handleCenter()
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,6 +24,11 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+video_gen = VideoGenerator(
+    base_url="https://ark.cn-beijing.volces.com/api/v3",
+    api_key="1b73476f-bf56-47f6-9d2d-06ef03976a61"
 )
 
 DATABASE_URL = "mysql+pymysql://root:040601@localhost:3306/media_platform?charset=utf8mb4"
@@ -118,6 +129,64 @@ def delete_material(material_id: int):
         return {"status": "deleted"}
 
 
+@app.post("/generate_image/")
+def generate_image(prompts: str = Form(...)):
+    try:
+        urls = hc.generateImageT2I(prompts)
+        return {
+            "status": "success",
+            "urls": urls
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "msg": str(e)
+        }
+
+@app.post("/download_image/")
+def download_image(url: str = Body(..., embed=True)):
+    try:
+        # 后端请求图片（不会被 CORS 拦截）
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+
+        # 获取格式
+        content_type = resp.headers.get("Content-Type", "image/jpeg")
+
+        # 返回图片二进制
+        return Response(content=resp.content, media_type=content_type)
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "msg": f"下载失败: {str(e)}"},
+        )
+
+@app.post("/video/generate/")
+async def video_generate(
+    text: str = Body(..., embed=True),
+    first_imgurl: str = Body(..., embed=True),
+    last_imgurl: str = Body(..., embed=True),
+):
+    try:
+        video_url = video_gen.D_vedio(text, first_imgurl, last_imgurl)
+
+        if not video_url:
+            return JSONResponse(
+                status_code=500,
+                content={"status": "error", "msg": "视频生成失败"}
+            )
+
+        return {
+            "status": "success",
+            "video_url": video_url
+        }
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "msg": str(e)}
+        )
 
 # 作品相关接口
 @app.get("/projects/", response_model=List[Project])

@@ -10,86 +10,121 @@ const candidateMaterials = ref([]) // 备选素材（本地暂存）
 const description = ref('')
 const API_BASE = "http://127.0.0.1:8000";
 
-// 处理上传 - 添加到备选素材
-const handleUpload = (file) => {
-  console.log('📥 接收到文件:', file);
+// 把网络 URL 下载为 File
+async function urlToFile(imageUrl) {
+  const response = await fetch("http://localhost:8000/download_image/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url: imageUrl }),
+  });
 
-  if (!file) {
-    console.error('❌ 文件为空');
-    return;
+  if (!response.ok) {
+    throw new Error("后端代理下载失败");
   }
 
-  // 创建本地预览 URL
+  const blob = await response.blob();
+  const file = new File([blob], "generated.jpg", { type: blob.type });
+
+  return file;
+}
+
+
+// 处理上传 - 添加到备选素材
+const handleUpload = (file) => {
+  if (!file) return;
+
+  // 创建本地预览 URL（仅用于用户上传的本地 File）
   const imageURL = URL.createObjectURL(file);
 
-  // 添加到备选素材列表
   const newMaterial = {
     id: Date.now(), // 临时ID
     name: file.name,
-    thumbnail: imageURL,
-    file: file // 保存原始文件对象
+    thumbnail: imageURL, // 这是 blob: URL（临时）
+    file: file,
+    _isObjectURL: true   // 标记，用于以后决定是否 revoke
   };
 
   candidateMaterials.value.push(newMaterial);
-
-  console.log('✅ 已添加到备选素材:', file.name);
-  console.log('📊 当前备选素材数量:', candidateMaterials.value.length);
 }
 
-// 生成图像
-const Generate = () => {
+// 生成图像并把它们放入备选素材（保证 thumbnail 可访问，并且 file 可上传）
+const Generate = async () => {
   if (!description.value.trim()) {
     alert('请输入描述内容');
     return;
   }
 
-  const data = {
-    prompts: description.value
+  loading.value = true;
+
+  try {
+    const formData = new FormData();
+    formData.append("prompts", description.value);
+
+    const res = await axios.post(`${API_BASE}/generate_image/`, formData);
+    loading.value = false;
+
+    if (!res.data || res.data.status !== 'success') {
+      alert("生成失败");
+      return;
+    }
+
+    const urls = res.data.urls || [];
+
+    // 用 for...of + await 保证顺序下载并 push（避免 forEach 的异步陷阱）
+    for (const url of urls) {
+      try {
+        // 1) 先构造能在浏览器直接显示的绝对 URL（后台可能返回相对路径）
+        const absoluteUrl = url.startsWith("http") ? url : (API_BASE + url);
+
+        // 2) 下载成 File（uploadMaterial 需要真正的 File）
+        const file = await urlToFile(absoluteUrl, `ai_${Date.now()}.png`);
+
+        // 3) push 到候选素材：thumbnail 使用后端的可访问 URL（绝对地址），file 保留真实 File
+        candidateMaterials.value.push({
+          id: Date.now() + Math.random(),
+          name: `AI生成_${new Date().toISOString().replace(/[:.]/g,'-')}.png`,
+          thumbnail: absoluteUrl,   // 用后端返回的/拼接后的可访问地址用于显示
+          file: file,
+          _isObjectURL: false      // 不是 blob URL（不需要 revoke）
+        });
+
+      } catch (e) {
+        console.error("下载生成图片失败:", e, url);
+        // 不中断整个批次，继续下一个
+      }
+    }
+
+    console.log("🎨 已添加 AI 生成图片到备选素材");
+  } catch (err) {
+    loading.value = false;
+    console.error(err);
+    alert("生成失败，服务器错误");
   }
-
-  console.log('🚀 发送生成请求:', data);
-
-  axios.post(`${API_BASE}/api/submit`, data)
-      .then(res => {
-        console.log('✅ 响应：', res.data);
-        alert('提交成功！');
-      })
-      .catch(err => {
-        console.error('❌ 错误：', err);
-        alert('提交失败，请检查网络连接');
-      })
-}
+};
 
 // 拖拽开始
 function handleDragStart(event, material) {
-  console.log('🎯 开始拖拽:', material.name);
-
   event.dataTransfer.setData('source', 'candidate');
   event.dataTransfer.setData('materialId', String(material.id));
-
-  // 使用全局变量存储文件对象
   window.__draggedMaterial = material;
-
   event.dataTransfer.effectAllowed = 'copy';
 }
 
 // 拖拽结束
-function handleDragEnd() {
-  console.log('🏁 拖拽结束');
-}
+function handleDragEnd() {}
 
-// 从备选素材删除
+// 从备选素材删除（只 revoke blob URLs）
 function removeCandidateMaterial(id) {
   const material = candidateMaterials.value.find(m => m.id === id);
   if (material) {
-    // 释放 blob URL
-    URL.revokeObjectURL(material.thumbnail);
+    if (material._isObjectURL && material.thumbnail && material.thumbnail.startsWith('blob:')) {
+      try { URL.revokeObjectURL(material.thumbnail); } catch(e) { /* ignore */ }
+    }
   }
-
   candidateMaterials.value = candidateMaterials.value.filter(m => m.id !== id);
-  console.log('🗑️ 已从备选素材删除, 剩余:', candidateMaterials.value.length);
 }
 </script>
+
 
 <template>
   <div class="main-container">
@@ -356,8 +391,12 @@ function removeCandidateMaterial(id) {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .empty-state p {

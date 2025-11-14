@@ -2,6 +2,10 @@
 import {ref} from 'vue';
 import Synthesis from "./Synthesis.vue";
 
+const firstFile = ref(null)
+const lastFile = ref(null)
+
+
 // 图片源（默认使用网络图片,可替换为本地路径）
 const image1 = ref('https://picsum.photos/600/400?random=1');
 const image2 = ref('https://picsum.photos/600/400?random=2');
@@ -28,11 +32,19 @@ const handleUpload = (index, e) => {
   const file = e.target.files[0];
   if (file) {
     const url = URL.createObjectURL(file);
-    index === 1 ? image1.value = url : image2.value = url;
-    // 清空输入框（否则同一张图片无法重复上传）
+
+    if (index === 1) {
+      image1.value = url;
+      firstFile.value = file;
+    } else {
+      image2.value = url;
+      lastFile.value = file;
+    }
+
     e.target.value = '';
   }
 };
+
 
 // 预览图片
 const previewImage = (index) => {
@@ -64,22 +76,73 @@ const handleDragOver = (e) => {
 // 处理放置
 const handleDrop = (index, e) => {
   e.preventDefault();
-
-  // 重置拖拽状态
   index === 1 ? dragOver1.value = false : dragOver2.value = false;
 
-  // 获取拖拽的图片URL
-  const imageUrl = e.dataTransfer.getData('imageUrl');
+  const source = e.dataTransfer.getData("source");
 
-  if (imageUrl) {
-    // 更新对应的图片
-    index === 1 ? image1.value = imageUrl : image2.value = imageUrl;
+  if (source === "library") {
+    const materialStr = e.dataTransfer.getData("material");
+    if (!materialStr) return;
+
+    const material = JSON.parse(materialStr);
+
+    // 直接使用 URL 显示图片
+    if (index === 1) {
+      image1.value = material.url;
+
+      // 注意：生成视频时后端需要文件，这里你没有 File，只能传 URL
+      // 所以后端 first_frame 应改为接收 URL
+      firstFile.value = material.url;
+    } else {
+      image2.value = material.url;
+      lastFile.value = material.url;
+    }
+
+    console.log("📥 从素材库拖入图片框:", material.filename);
+    return;
   }
+
+
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+
+  const url = e.dataTransfer.getData("material-url");
+  if (url) {
+    if (index === 1) {
+      image1.value = BASE_URL + url;  // 关键：完整 URL
+    } else {
+      image2.value = BASE_URL + url;
+    }
+    return;
+  }
+
 };
 
-const BeginSyn = () => {
-  //开始合成
-}
+
+
+const BeginSyn = async () => {
+  if (!firstFile.value || !lastFile.value) {
+    alert("请先上传首帧和尾帧");
+    return;
+  }
+
+  const body = {
+    text: "360度环绕运镜",
+    first_frame: firstFile.value,  // 可能是 URL
+    last_frame: lastFile.value,    // 可能是 URL
+  };
+
+  const res = await fetch("http://127.0.0.1:8000/video/generate/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+  console.log("后端返回：", data);
+};
+
+
 </script>
 
 <template>

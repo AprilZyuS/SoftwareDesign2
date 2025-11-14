@@ -33,9 +33,13 @@ async function removeMaterial(id) {
 // 拖拽开始 - 用于拖拽到双图片框
 function handleDragStart(event, material) {
   event.dataTransfer.setData('source', 'library');
-  event.dataTransfer.setData('imageUrl', API_BASE + material.filepath);
-  event.dataTransfer.effectAllowed = 'copy';
+  event.dataTransfer.setData('material', JSON.stringify({
+    id: material.id,
+    filename: material.filename,
+    url: API_BASE + material.filepath,
+  }));
 }
+
 
 // 接收从备选素材拖拽过来的文件
 function handleDragEnter(e) {
