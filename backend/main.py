@@ -10,10 +10,13 @@ from HandleCenter import handleCenter
 import os
 import requests
 from fastapi.responses import Response
-from vg import VideoGenerator
+import vg
 from fastapi import Body
+from urllib.parse import urlparse
+import os
 
 from models import Material, Project
+import base64
 
 app = FastAPI()
 hc = handleCenter()
@@ -26,9 +29,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-video_gen = VideoGenerator(
+video_gen = vg.VideoGenerator(
     base_url="https://ark.cn-beijing.volces.com/api/v3",
-    api_key="1b73476f-bf56-47f6-9d2d-06ef03976a61"
+    api_key="1e2a6dd2-cbfa-4f33-8f5d-953a7d584bbc"
 )
 
 DATABASE_URL = "mysql+pymysql://root:040601@localhost:3306/media_platform?charset=utf8mb4"
@@ -40,6 +43,26 @@ SQLModel.metadata.create_all(engine)
 UPLOAD_ROOT = "uploads"
 os.makedirs(UPLOAD_ROOT, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_ROOT), name="uploads")
+
+
+
+def image_to_base64(file_path: str) -> str:
+    """将本地图片转换为base64编码"""
+    with open(file_path, "rb") as f:
+        img_data = f.read()
+        b64 = base64.b64encode(img_data).decode('utf-8')
+        # 获取文件扩展名判断MIME类型
+        ext = file_path.lower().split('.')[-1]
+        mime_map = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'webp': 'image/webp',
+            'gif': 'image/gif'
+        }
+        mime = mime_map.get(ext, 'image/jpeg')
+        return f"data:{mime};base64,{b64}"
+
 
 class Prompts(BaseModel):
     prompts: str
@@ -162,14 +185,37 @@ def download_image(url: str = Body(..., embed=True)):
             content={"status": "error", "msg": f"下载失败: {str(e)}"},
         )
 
+
 @app.post("/video/generate/")
 async def video_generate(
-    text: str = Body(..., embed=True),
-    first_imgurl: str = Body(..., embed=True),
-    last_imgurl: str = Body(..., embed=True),
+        text: str = Body(..., embed=True),
+        first_imgurl: str = Body(..., embed=True),
+        last_imgurl: str = Body(..., embed=True),
 ):
     try:
-        video_url = video_gen.D_vedio(text, first_imgurl, last_imgurl)
+
+        def url_to_local_path(url: str) -> str:
+            parsed = urlparse(url)
+            # parsed.path 是 '/uploads/user_1/xxx.jpg'
+            local_path = parsed.path.lstrip('/')  # 去掉开头的 '/'
+            # 拼上项目根目录
+            local_path = os.path.join(os.getcwd(), local_path)
+            return local_path
+
+        first_local_path = url_to_local_path(first_imgurl)
+        last_local_path = url_to_local_path(last_imgurl)
+
+        first_processed = image_to_base64(first_local_path)
+        last_processed = image_to_base64(last_local_path)
+
+
+
+        print(f"🎬 视频生成请求:")
+        print(f"  文本提示: {text}")
+        print(f"  首帧: {'base64编码' if first_processed.startswith('data:') else first_processed}")
+        print(f"  尾帧: {'base64编码' if last_processed.startswith('data:') else last_processed}")
+
+        video_url = video_gen.D_vedio(text, first_processed, last_processed)
 
         if not video_url:
             return JSONResponse(
@@ -177,12 +223,23 @@ async def video_generate(
                 content={"status": "error", "msg": "视频生成失败"}
             )
 
+        print(f"✅ 视频生成成功: {video_url}")
+
         return {
             "status": "success",
             "video_url": video_url
         }
 
+    except FileNotFoundError as e:
+        print(f"❌ 文件未找到: {str(e)}")
+        return JSONResponse(
+            status_code=404,
+            content={"status": "error", "msg": str(e)}
+        )
     except Exception as e:
+        print(f"❌ 视频生成异常: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return JSONResponse(
             status_code=500,
             content={"status": "error", "msg": str(e)}

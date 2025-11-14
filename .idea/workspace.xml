@@ -4,20 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="199e7d6e-2442-4826-9000-65e7e69c57b9" name="更改" comment="前端工作基本完成，需要和后端的API链接起来">
+    <list default="true" id="199e7d6e-2442-4826-9000-65e7e69c57b9" name="更改" comment="文生图衔接完成，图生视频衔接还差一点">
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_201141_generated.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_201223_generated.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SoftwareDesign.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SoftwareDesign.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_213053_generated.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_213103_Snipaste_2025-08-16_20-57-05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_215541_generated.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/uploads/user_1/20251114_232333_generated.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/HandleCenter.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/HandleCenter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_114711_1dce70de53b9df10cd7867c5a4bf45a6_0.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_115524_3219d18c9451b24e3a77c36881b28755_0.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_140604_3219d18c9451b24e3a77c36881b28755_0.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/uploads/user_1/20251108_143236_3219d18c9451b24e3a77c36881b28755_0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialGeneration.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialGeneration.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/MaterialLibrary.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/vg.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/vg.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/my-project/src/components/Synthesis.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-project/src/components/Synthesis.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,14 +54,12 @@
     &quot;assignee&quot;: &quot;AprilZyuS&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="e2b37f2c-0b12-4ebb-beb7-b732e870dac5" />
-        <option name="url" value="https://github.com/AprilZyuS/SoftwareDesign2.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AprilZyuS/SoftwareDesign2.git&quot;,
+    &quot;accountId&quot;: &quot;7a027241-8fb6-4918-a21d-81b545592b33&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -147,6 +145,13 @@
       <workItem from="1762873275881" duration="382000" />
       <workItem from="1762876321484" duration="225000" />
       <workItem from="1763116159982" duration="7480000" />
+      <workItem from="1763126092885" duration="543000" />
+      <workItem from="1763126651786" duration="4000" />
+      <workItem from="1763127008043" duration="3538000" />
+      <workItem from="1763130900307" duration="688000" />
+      <workItem from="1763131597923" duration="236000" />
+      <workItem from="1763131898970" duration="4916000" />
+      <workItem from="1763136971891" duration="1346000" />
     </task>
     <task id="LOCAL-00001" summary="前端可以显示后端保存的图像了">
       <option name="closed" value="true" />
@@ -188,7 +193,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762848143109</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="文生图衔接完成，图生视频衔接还差一点">
+      <option name="closed" value="true" />
+      <created>1763126141634</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1763126141634</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,7 +213,8 @@
     <MESSAGE value="前端可以显示后端保存的图像了" />
     <MESSAGE value="提示词接口已经写好，部分页面跳转完成" />
     <MESSAGE value="前端工作基本完成，需要和后端的API链接起来" />
-    <option name="LAST_COMMIT_MESSAGE" value="前端工作基本完成，需要和后端的API链接起来" />
+    <MESSAGE value="文生图衔接完成，图生视频衔接还差一点" />
+    <option name="LAST_COMMIT_MESSAGE" value="文生图衔接完成，图生视频衔接还差一点" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SoftwareDesign$main.coverage" NAME="main 覆盖结果" MODIFIED="1762568435434" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/backend" />

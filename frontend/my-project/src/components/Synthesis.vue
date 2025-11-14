@@ -5,6 +5,9 @@ import Synthesis from "./Synthesis.vue";
 const firstFile = ref(null)
 const lastFile = ref(null)
 
+const firstFileUrl = ref(null);
+const lastFileUrl = ref(null);
+
 
 // 图片源（默认使用网络图片,可替换为本地路径）
 const image1 = ref('https://picsum.photos/600/400?random=1');
@@ -119,27 +122,101 @@ const handleDrop = (index, e) => {
 };
 
 
-
 const BeginSyn = async () => {
-  if (!firstFile.value || !lastFile.value) {
-    alert("请先上传首帧和尾帧");
-    return;
+  try {
+    // 检查是否有图片
+    if (!firstFile.value && !firstFileUrl.value) {
+      alert("请先上传或选择首帧图片");
+      return;
+    }
+    if (!lastFile.value && !lastFileUrl.value) {
+      alert("请先上传或选择尾帧图片");
+      return;
+    }
+
+    let firstImgUrl, lastImgUrl;
+
+    // 处理首帧
+    if (firstFile.value instanceof File) {
+      console.log("⬆️ 上传首帧图片...");
+      const formData = new FormData();
+      formData.append("file", firstFile.value);
+      formData.append("user_id", 1);
+
+      const uploadRes = await fetch("http://127.0.0.1:8000/upload/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error(`首帧上传失败: ${uploadRes.status}`);
+      }
+
+      const uploadData = await uploadRes.json();
+      firstImgUrl = uploadData.url;
+      console.log("✅ 首帧上传成功:", firstImgUrl);
+    } else {
+      // URL 素材
+      firstImgUrl = firstFile.value || firstFileUrl.value;
+      console.log("✅ 使用素材库首帧:", firstImgUrl);
+    }
+
+    // 处理尾帧
+    if (lastFile.value instanceof File) {
+      console.log("⬆️ 上传尾帧图片...");
+      const formData = new FormData();
+      formData.append("file", lastFile.value);
+      formData.append("user_id", 1);
+
+      const uploadRes = await fetch("http://127.0.0.1:8000/upload/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error(`尾帧上传失败: ${uploadRes.status}`);
+      }
+
+      const uploadData = await uploadRes.json();
+      lastImgUrl = uploadData.url;
+      console.log("✅ 尾帧上传成功:", lastImgUrl);
+    } else {
+      lastImgUrl = lastFile.value || lastFileUrl.value;
+      console.log("✅ 使用素材库尾帧:", lastImgUrl);
+    }
+
+    // 发送视频生成请求
+    const body = {
+      text: "360度环绕运镜",
+      first_imgurl: firstImgUrl,
+      last_imgurl: lastImgUrl,
+    };
+
+    console.log("🎬 发送视频生成请求:", body);
+
+    const res = await fetch("http://127.0.0.1:8000/video/generate/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`请求失败 ${res.status}: ${errorText}`);
+    }
+
+    const data = await res.json();
+    console.log("✅ 后端返回:", data);
+
+    if (data.status === "success") {
+      alert(`视频生成成功!\n\n视频URL:\n${data.video_url}`);
+    } else {
+      alert(`生成失败: ${data.msg}`);
+    }
+  } catch (err) {
+    console.error("❌ 错误:", err);
+    //alert(`操作失败: ${err.message}`);
   }
-
-  const body = {
-    text: "360度环绕运镜",
-    first_frame: firstFile.value,  // 可能是 URL
-    last_frame: lastFile.value,    // 可能是 URL
-  };
-
-  const res = await fetch("http://127.0.0.1:8000/video/generate/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-
-  const data = await res.json();
-  console.log("后端返回：", data);
 };
 
 
